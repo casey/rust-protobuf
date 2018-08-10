@@ -1,5 +1,8 @@
 use std::io;
 use std::process;
+use std::path::Path;
+use std::path::PathBuf;
+use std::convert::AsRef;
 
 #[macro_use]
 extern crate log;
@@ -45,18 +48,18 @@ pub struct DescriptorSetOutArgs<'a> {
 
 /// Protoc command.
 pub struct Protoc {
-    exec: String,
+    exec: PathBuf,
 }
 
 impl Protoc {
     /// New `protoc` command from `$PATH`
     pub fn from_env_path() -> Protoc {
-        Protoc { exec: "protoc".to_owned() }
+        Protoc::from_path("protoc")
     }
 
     /// New `protoc` command from specified path
-    pub fn from_path(path: &str) -> Protoc {
-        Protoc { exec: path.to_owned() }
+    pub fn from_path<P: AsRef<Path>>(path: P) -> Protoc {
+        Protoc { exec: path.as_ref().to_owned() }
     }
 
     /// Check `protoc` command found and valid
